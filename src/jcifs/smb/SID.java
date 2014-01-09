@@ -660,7 +660,7 @@ synchronized (sid_cache) {
      * flag should be used which causes all group member SIDs to be resolved
      * together in a single more efficient operation.
      */
-    static Map getLocalGroupsMap(String authorityServerName,
+    public static Map getLocalGroupsMap(String authorityServerName,
                     NtlmPasswordAuthentication auth,
                     int flags) throws IOException {
         SID domsid = SID.getServerSid(authorityServerName, auth);

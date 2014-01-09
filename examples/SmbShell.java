@@ -16,15 +16,10 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-import jcifs.smb.*;
-import java.net.UnknownHostException;
-import java.net.MalformedURLException;
-import java.util.GregorianCalendar;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import jcifs.smb.NtlmAuthenticator;
 
 public class SmbShell extends NtlmAuthenticator {
-
+/*
     protected NtlmPasswordAuthentication getNtlmPasswordAuthentication() {
         System.out.println( getRequestingException().getMessage() +
                     " for " + getRequestingURL() );
@@ -139,7 +134,7 @@ public class SmbShell extends NtlmAuthenticator {
                         for( int j = 0; j < list.length; j++ ) {
                             StringBuffer sb = new StringBuffer();
                             Date date = new Date( list[j].lastModified() );
-                            Format.print( System.out, "%-40s", list[j].getName() );
+                            Format.print(System.out, "%-40s", list[j].getName());
                             sb.append( list[j].isDirectory() ? 'd' : '-' );
                             sb.append( list[j].canRead() ? 'r' : '-' );
                             sb.append( list[j].canWrite() ? 'w' : '-' );
@@ -187,4 +182,5 @@ public class SmbShell extends NtlmAuthenticator {
         SmbShell smbsh = new SmbShell( argv.length > 0 ? argv[0] : "smb://" );
         smbsh.run();
     }
+    */
 }

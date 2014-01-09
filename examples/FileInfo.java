@@ -1,7 +1,9 @@
-import java.util.*;
-import java.text.*;
-import java.net.*;
-import jcifs.smb.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import jcifs.smb.ACE;
+import jcifs.smb.SmbFile;
 
 public class FileInfo {
 
@@ -16,7 +18,7 @@ public class FileInfo {
     };
 
     public static void main( String argv[] ) throws Exception {
-        int i, start, end;;
+        int i, start, end;
         SimpleDateFormat sdf = new SimpleDateFormat( "MM/dd/yy hh:mm:ss a" );
         GregorianCalendar cal = new GregorianCalendar();
         SmbFile f;
@@ -70,7 +72,7 @@ public class FileInfo {
                     System.out.println( "      getUncPath: " + f.getUncPath() );
                     break;
                 case 10:
-                    System.out.println( "         getType: " + TYPES[f.getType()] );
+                    System.out.println( "         getType: " + f.getType());
                     break;
                 case 11:
                     System.out.println( "        getShare: " + f.getShare() );
@@ -122,6 +124,9 @@ public class FileInfo {
                     break;
                 case 24:
                     System.out.println( "      getDfsPath: " + f.getDfsPath() );
+                    break;
+                case 25:
+                    System.out.println( "      lastAccessTime: " + f.getAccessTime() );
                     break;
             }
             i++;

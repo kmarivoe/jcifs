@@ -43,6 +43,8 @@ class Trans2QueryPathInformationResponse extends SmbComTransactionResponse {
         public long getLastWriteTime() {
             return lastWriteTime;
         }
+        public long getLastAccessTime() { return lastAccessTime; }
+
         public long getSize() {
             return 0L;
         }
@@ -71,6 +73,11 @@ class Trans2QueryPathInformationResponse extends SmbComTransactionResponse {
         public long getLastWriteTime() {
             return 0L;
         }
+
+        public long getLastAccessTime() {
+            return 0L;
+        }
+
         public long getSize() {
             return endOfFile;
         }
