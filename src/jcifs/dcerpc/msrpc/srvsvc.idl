@@ -70,6 +70,17 @@ interface srvsvc
 			[in] int level,
 			[out,switch_is(level)] ShareInfo *info);
 
+    typedef struct {
+        int parmErr;
+    } ParmErrHolder;
+    
+    [op(0x11)]
+    int ShareSetInfo([in,string,unique] wchar_t *servername,
+            [in,string] wchar_t *sharename,
+            [in] int level,
+            [in,switch_is(level)] ShareInfo *info,
+            [in, out, unique] ParmErrHolder *parmErr);
+
 	typedef struct {
 		unsigned long platform_id;
 		[string] wchar_t *name;

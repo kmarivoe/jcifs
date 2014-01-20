@@ -3,8 +3,6 @@ package jcifs.dcerpc.msrpc;
 import jcifs.dcerpc.*;
 import jcifs.dcerpc.ndr.*;
 
-import jcifs.util.Hexdump;
-
 public class srvsvc {
 
     public static String getSyntax() {
@@ -343,11 +341,11 @@ public class srvsvc {
         public int resume_handle;
 
         public ShareEnumAll(String servername,
-                    int level,
-                    NdrObject info,
-                    int prefmaxlen,
-                    int totalentries,
-                    int resume_handle) {
+                            int level,
+                            NdrObject info,
+                            int prefmaxlen,
+                            int totalentries,
+                            int resume_handle) {
             this.servername = servername;
             this.level = level;
             this.info = info;
@@ -402,9 +400,9 @@ public class srvsvc {
         public NdrObject info;
 
         public ShareGetInfo(String servername,
-                    String sharename,
-                    int level,
-                    NdrObject info) {
+                            String sharename,
+                            int level,
+                            NdrObject info) {
             this.servername = servername;
             this.sharename = sharename;
             this.level = level;
@@ -429,6 +427,78 @@ public class srvsvc {
                 }
                 _src = _src.deferred;
                 info.decode(_src);
+
+            }
+            retval = (int)_src.dec_ndr_long();
+        }
+    }
+    public static class ParmErrHolder extends NdrObject {
+
+        public int parmErr;
+
+        public void encode(NdrBuffer _dst) throws NdrException {
+            _dst.align(4);
+            _dst.enc_ndr_long(parmErr);
+
+        }
+        public void decode(NdrBuffer _src) throws NdrException {
+            _src.align(4);
+            parmErr = (int)_src.dec_ndr_long();
+
+        }
+    }
+    public static class ShareSetInfo extends DcerpcMessage {
+
+        public int getOpnum() { return 0x11; }
+
+        public int retval;
+        public String servername;
+        public String sharename;
+        public int level;
+        public NdrObject info;
+        public ParmErrHolder parmErr;
+
+        public ShareSetInfo(String servername,
+                            String sharename,
+                            int level,
+                            NdrObject info,
+                            ParmErrHolder parmErr) {
+            this.servername = servername;
+            this.sharename = sharename;
+            this.level = level;
+            this.info = info;
+            this.parmErr = parmErr;
+        }
+
+        public void encode_in(NdrBuffer _dst) throws NdrException {
+            _dst.enc_ndr_referent(servername, 1);
+            if (servername != null) {
+                _dst.enc_ndr_string(servername);
+
+            }
+            _dst.enc_ndr_string(sharename);
+            _dst.enc_ndr_long(level);
+            int _descr = level;
+            _dst.enc_ndr_long(_descr);
+            _dst.enc_ndr_referent(info, 1);
+            if (info != null) {
+                _dst = _dst.deferred;
+                info.encode(_dst);
+
+            }
+            _dst.enc_ndr_referent(parmErr, 1);
+            if (parmErr != null) {
+                parmErr.encode(_dst);
+
+            }
+        }
+        public void decode_out(NdrBuffer _src) throws NdrException {
+            int _parmErrp = _src.dec_ndr_long();
+            if (_parmErrp != 0) {
+                if (parmErr == null) { /* YOYOYO */
+                    parmErr = new ParmErrHolder();
+                }
+                parmErr.decode(_src);
 
             }
             retval = (int)_src.dec_ndr_long();

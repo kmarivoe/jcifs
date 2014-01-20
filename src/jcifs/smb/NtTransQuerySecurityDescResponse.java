@@ -52,7 +52,7 @@ class NtTransQuerySecurityDescResponse extends SmbComNtTransactionResponse {
 
         try {
             securityDescriptor = new SecurityDescriptor();
-            bufferIndex += securityDescriptor.decode(buffer, bufferIndex, len);
+            bufferIndex += securityDescriptor.decode(buffer, bufferIndex);
         } catch (IOException ioe) {
             throw new RuntimeException(ioe.getMessage());
         }

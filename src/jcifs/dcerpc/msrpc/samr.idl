@@ -93,4 +93,16 @@ interface samr
 		uint32_t count;
 		[size_is(count)] SamrRidWithAttribute *rids;
 	} SamrRidWithAttributeArray;
+	
+	typedef struct {
+        int count;
+        [size_is(count)] uint32_t *rids;
+    } IntArray;
+
+    [op(0x11)]
+    int SamrLookupNamesInDomain([in] policy_handle *handle,
+            [in] int count,
+            [in,size_is(1000),length_is(count)] unicode_string *names,
+            [out] IntArray *rids,
+            [out] IntArray *types);
 }

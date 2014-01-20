@@ -25,7 +25,7 @@ abstract class SmbComNtTransaction extends SmbComTransaction {
     private static final int NTT_SECONDARY_PARAMETER_OFFSET  = 51;
 
     static final int NT_TRANSACT_QUERY_SECURITY_DESC = 6;
-
+    static final int NT_TRANSACT_SET_SECURITY_DESC = 3;
     int function;
 
     SmbComNtTransaction() {

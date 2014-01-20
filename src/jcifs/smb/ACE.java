@@ -1,7 +1,6 @@
 package jcifs.smb;
 
 import jcifs.util.Hexdump;
-import java.io.IOException;
 
 /**
  * An Access Control Entry (ACE) is an element in a security descriptor
@@ -47,15 +46,15 @@ import java.io.IOException;
 
 public class ACE {
 
-    public static final int FILE_READ_DATA        = 0x00000001; // 1
-    public static final int FILE_WRITE_DATA       = 0x00000002; // 2
-    public static final int FILE_APPEND_DATA      = 0x00000004; // 3
-    public static final int FILE_READ_EA          = 0x00000008; // 4
-    public static final int FILE_WRITE_EA         = 0x00000010; // 5
-    public static final int FILE_EXECUTE          = 0x00000020; // 6
-    public static final int FILE_DELETE           = 0x00000040; // 7
-    public static final int FILE_READ_ATTRIBUTES  = 0x00000080; // 8
-    public static final int FILE_WRITE_ATTRIBUTES = 0x00000100; // 9
+    public static final int FILE_READ_DATA        = 0x00000001; // 0
+    public static final int FILE_WRITE_DATA       = 0x00000002; // 1
+    public static final int FILE_APPEND_DATA      = 0x00000004; // 2
+    public static final int FILE_READ_EA          = 0x00000008; // 3
+    public static final int FILE_WRITE_EA         = 0x00000010; // 4
+    public static final int FILE_EXECUTE          = 0x00000020; // 5
+    public static final int FILE_DELETE           = 0x00000040; // 6
+    public static final int FILE_READ_ATTRIBUTES  = 0x00000080; // 7
+    public static final int FILE_WRITE_ATTRIBUTES = 0x00000100; // 8
     public static final int DELETE                = 0x00010000; // 16
     public static final int READ_CONTROL          = 0x00020000; // 17
     public static final int WRITE_DAC             = 0x00040000; // 18
@@ -153,6 +152,57 @@ public class ACE {
         return size;
     }
 
+    /**
+     * Encode ACE into byte array
+     * @param buf destination array
+     * @param bi starting index in the destination array
+     * @return size of the ace (number of bytes)
+     */
+    int encode( byte[] buf, int bi ) {
+        return encode(buf,bi,null);
+    }
+
+    /**
+     * Encode ACE into byte array
+     * @param buf destination array
+     * @param bi starting index in the destination array
+     * @param aceAccess ace access mask to be encoded. In case of null, original ace access will be incoded
+     * @return size of the ace (number of bytes)
+     */
+    int encode( byte[] buf, int bi, Integer aceAccess ) {
+
+        buf[bi++] = allow ? (byte)0x00 : (byte)0x01;
+        buf[bi++] = (byte)flags;
+
+        int size = getACESize();
+        ServerMessageBlock.writeInt2(size,buf,bi);
+        bi+=2;
+
+        ServerMessageBlock.writeInt4(aceAccess != null ? aceAccess : access,buf,bi);
+        bi+=4;
+
+        byte[] sidArr = SID.toByteArray(sid);
+        ServerMessageBlock.writeByteArr(SID.toByteArray(sid),buf,bi);
+        bi+=sidArr.length;
+
+        return size;
+    }
+
+    /**
+     * Get ACE size. ACE size is:
+     * isAllow - 1 byte
+     * flags - 1 byte
+     * size - 2 bytes
+     * access - 4 bytes
+     * sid - sizeOf(SID)
+     * ------------------------
+     * @return ACE size = num of bytes
+     */
+    int getACESize(){
+        byte[] sidArr = SID.toByteArray(sid);
+        return 1 + 1 + 2 + 4 + sidArr.length;
+    }
+
     void appendCol(StringBuffer sb, String str, int width) {
         sb.append(str);
         int count = width - str.length();
@@ -160,6 +210,23 @@ public class ACE {
             sb.append(' ');
         }
     }
+
+    public void setAllow(boolean allow) {
+        this.allow = allow;
+    }
+
+    public void setFlags(int flags) {
+        this.flags = flags;
+    }
+
+    public void setAccess(int access) {
+        this.access = access;
+    }
+
+    public void setSid(SID sid) {
+        this.sid = sid;
+    }
+
     /**
      * Return a string represeting this ACE.
      * <p>
